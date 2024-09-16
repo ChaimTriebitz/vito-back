@@ -32,18 +32,6 @@ const UserSchema = new mongoose.Schema({
       minlength: 8,
       select: false,
    },
-   avatar: {
-      type: String,
-   },
-   reset_password_token: {
-      type: String
-   },
-   reset_password_expire: {
-      type: Date
-   },
-   images: {
-      type: Array
-   }
 })
 
 UserSchema.pre('save', async function (next) {
@@ -59,13 +47,6 @@ UserSchema.methods.matchPasswords = async function (password) {
 
 UserSchema.methods.getSignedToken = function () {
    return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION })
-}
-
-UserSchema.methods.getResetPasswordToken = function () {
-   const resetToken = crypto.randomBytes(20).toString('hex')
-   this.reset_password_token = crypto.createHash('sha256').update(resetToken).digest('hex')
-   this.reset_password_expire = Date.now() + 10 * (60 * 1000)
-   return resetToken
 }
 
 module.exports = mongoose.model('User', UserSchema)

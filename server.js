@@ -9,14 +9,18 @@ app.use(express.urlencoded({ extended: true, limit: '500mb' }))
 
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/private', require('./routes/private'))
+app.use('/api/banks', require('./routes/banks'))
 
 app.use(require('./middleware/error'))
 
 const PORT = process.env.PORT || 5000
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true })
+mongoose.connect(process.env.MONGO_URI)
    .then(() =>
       app.listen(PORT, () => {
          console.log('listening on port', PORT)
       })
    ).catch((err) => console.log(err))
+
+
+
