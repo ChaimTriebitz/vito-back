@@ -2,35 +2,39 @@ const mongoose = require('mongoose');
 
 const BankSchema = new mongoose.Schema({
    bank: {
-      type:String,
+      type: String,
    },
    contact: {
-      type:String,
+      type: String,
    },
    position: {
-      type:String,
+      type: String,
+   },
+   category: {
+      type: String,
+      enum: ['category1', 'category2', 'category3'],
    },
    email: {
-      type:String,
+      type: String,
       match: [
          /^(?=.{1,256}$)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,}|xn--[a-zA-Z0-9]+)$/
          , 'valid email required'
       ]
    },
    cell: {
-      type:Number,
+      type: Number,
    },
    office: {
-      type:Number,
+      type: Number,
    },
    lender: {
-      type:String,
+      type: String,
    },
    loan: {
-      type:String,
+      type: String,
    },
    territories: {
-      type:String,
+      type: String,
    },
 });
 
