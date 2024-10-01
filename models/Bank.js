@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const BankSchema = new mongoose.Schema({
    bank: {
-      type: String,
+      type: String,  
    },
    contact: {
       type: String,
@@ -28,6 +28,9 @@ const BankSchema = new mongoose.Schema({
       type: Number,
    },
    lender: {
+      type: String,
+   },
+   website: {
       type: String,
    },
    loan: {
