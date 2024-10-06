@@ -17,10 +17,10 @@ async function register(req, res, next) {
    }
 }
 async function login(req, res, next) {
-   const { email, password } = req.body
-   if (!email || !password) return next(new ErrorResponse('Email & Password required', 400))
+   const { username, password } = req.body
+   if (!username || !password) return next(new ErrorResponse('Username & Password required', 400))
    try {
-      const user = await User.findOne({ email }).select('+password')
+      const user = await User.findOne({ username }).select('+password')
       if (!user) return next(new ErrorResponse('Invalid credentials', 401))
       const isMatch = await user.matchPasswords(password)
       if (!isMatch) return next(new ErrorResponse('Invalid credentials', 401))

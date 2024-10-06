@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
          true,
          'password required'
       ],
-      minlength: 8,
+      minlength: 4,
       select: false,
    },
 })
