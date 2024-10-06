@@ -8,7 +8,6 @@ module.exports = {
 
 async function register(req, res, next) {
    const { username, email, password } = req.body
-   console.log(username, email, password);
    
    try {
       const user = await User.create({ username, email, password})
