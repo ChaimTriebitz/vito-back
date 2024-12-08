@@ -16,6 +16,7 @@ async function register(req, res, next) {
       next(err)
    }
 }
+
 async function login(req, res, next) {
    const { username, password } = req.body
    if (!username || !password) return next(new ErrorResponse('Username & Password required', 400))
