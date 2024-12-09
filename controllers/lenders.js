@@ -37,7 +37,7 @@ async function create(req, res, next) {
    try {
       const newLender = new Lender(lenderData);
       await newLender.save();
-      res.status(201).json(newLender);
+      res.status(201).json({ message: `${newLender.lender} created successfully`, newLender });
    } catch (err) {
       res.status(400).json({ message: err.message });
    }
@@ -46,11 +46,11 @@ async function create(req, res, next) {
 async function update(req, res, next) {
    const { id } = req.params;
    const updateData = req.body;
-   
+
    try {
       const updatedLender = await Lender.findByIdAndUpdate(id, updateData, { new: true });
       if (!updatedLender) return res.status(404).json({ message: 'Lender not found' });
-      res.json(updatedLender);
+      res.json({ message: `${updateData.lender} updated successfully`, updateData });
    } catch (err) {
       res.status(400).json({ message: err.message });
    }
