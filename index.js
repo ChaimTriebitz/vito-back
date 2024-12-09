@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true, limit: '500mb' }))
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/private', require('./routes/private'))
 app.use('/api/banks', require('./routes/banks'))
+app.use('/api/lenders', require('./routes/lenders.js'))
 
 app.use(require('./middleware/error'))
 
