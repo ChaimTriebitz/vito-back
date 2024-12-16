@@ -7,7 +7,7 @@ const LenderSchema = new mongoose.Schema({
    },
    type: {
       type: [String],
-      enum: ['CMBS', 'Construction Loan', 'Bank', 'Fund', 'Freddie Fannie', 'SBL'],
+      enum: ['','CMBS', 'Construction Loan', 'Bank', 'Fund', 'Freddie Fannie', 'SBL'],
    },
    deal_size: {
       type: Number,
@@ -17,7 +17,7 @@ const LenderSchema = new mongoose.Schema({
    },
    position: {
       type: String,
-      enum: ['Team Leader', 'Assistant Vice President', 'Originator', 'Loan Officer', 'MANAGING DIRECTOR'],
+      enum: ['','Team Leader', 'Assistant Vice President', 'Originator', 'Loan Officer', 'MANAGING DIRECTOR'],
    },
    office: {
       type: Number,
