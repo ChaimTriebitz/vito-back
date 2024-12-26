@@ -1,4 +1,6 @@
-const Lender = require('../models/Lender.js')
+const Lender = require('../models/Lender.js');
+const ErrorResponse = require('../utils/errorResponse.js');
+const resolve = require('../middleware/response.js')
 
 module.exports = {
    get,
@@ -10,59 +12,50 @@ module.exports = {
 
 async function get(req, res, next) {
    try {
-      const lenders = await Lender.find();
-      res.json(lenders);
+      const data = await Lender.find();
+      resolve.success(res, 200, 'Lenders', data)
    } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(new ErrorResponse(err.message))
    }
 }
 
 async function createMany(req, res, next) {
-   const { data } = req.body;
-   console.log(data);
-
-   Lender.insertMany(data)
-      .then((d) => {
-         console.log('lenders inserted successfully');
-         res.json(d);
-      })
-      .catch((error) => {
-         console.error('Error inserting lenders data: ', error);
-         res.status(500).json({ message: 'Error inserting lenders data' });
-      });
+   try {
+      const data = await Lender.insertMany(req.body)
+      resolve.success(res, 201, 'lenders inserted successfully', data)
+   } catch (err) {
+      next(new ErrorResponse(err.message, 400))
+   }
 }
 
 async function create(req, res, next) {
-   const lenderData = req.body;
    try {
-      const newLender = new Lender(lenderData);
-      await newLender.save();
-      res.status(201).json({ message: `${newLender.lender} created successfully`, newLender });
+      const data = new Lender(req.body)
+      await data.save()
+      resolve.success(res, 201, `${data.lender} created successfully`, data)
    } catch (err) {
-      res.status(400).json({ message: err.message });
+      next(new ErrorResponse(err.message, 400))
    }
 }
 
 async function update(req, res, next) {
-   const { id } = req.params;
-   const updateData = req.body;
 
    try {
-      const updatedLender = await Lender.findByIdAndUpdate(id, updateData, { new: true });
-      if (!updatedLender) return res.status(404).json({ message: 'Lender not found' });
-      res.json({ message: `${updateData.lender} updated successfully`, updateData });
+      const data = await Lender.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+      if (!data) return next(new ErrorResponse('Lender not found', 404))
+      resolve.success(res, 201, `${data.lender} updated successfully`, data)
    } catch (err) {
-      res.status(400).json({ message: err.message });
+      next(new ErrorResponse(err.message, 400))
    }
 }
 
 async function remove(req, res, next) {
-   const { id } = req.params;
+
    try {
-      const deletedLender = await Lender.findByIdAndDelete(id);
-      if (!deletedLender) return res.status(404).json({ message: 'Lender not found' });
-      res.json({ message: 'Lender deleted successfully' });
+      const data = await Lender.findByIdAndDelete(req.params.id);
+      if (!data) return next(new ErrorResponse('Lender not found', 404))
+      resolve.success(res, 204, 'Lender deleted successfully', data)
    } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(new ErrorResponse(err.message))
    }
 }

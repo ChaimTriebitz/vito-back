@@ -1,4 +1,6 @@
-const Bank = require('../models/Bank')
+const Bank = require('../models/Bank.js');
+const ErrorResponse = require('../utils/errorResponse.js');
+const resolve = require('../middleware/response.js')
 
 module.exports = {
    get,
@@ -10,58 +12,48 @@ module.exports = {
 
 async function get(req, res, next) {
    try {
-      const banks = await Bank.find();
-      res.json(banks);
+      const data = await Bank.find();
+      resolve.success(res, 200, 'Banks', data)
    } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(new ErrorResponse(err.message))
    }
 }
 
 async function createMany(req, res, next) {
-   const { data } = req.body;
-   console.log(data);
-
-   Bank.insertMany(data)
-      .then((d) => {
-         console.log('Banks inserted successfully');
-         res.json(d);
-      })
-      .catch((error) => {
-         console.error('Error inserting banks data: ', error);
-         res.status(500).json({ message: 'Error inserting banks data' });
-      });
+   try {
+      const data = await Bank.insertMany(req.body)
+      resolve.success(res, 201, 'lenders inserted successfully', data)
+   } catch (err) {
+      next(new ErrorResponse(err.message, 400))
+   }
 }
 
 async function create(req, res, next) {
-   const bankData = req.body;
    try {
-      const newBank = new Bank(bankData);
-      await newBank.save();
-      res.status(201).json(newBank);
+      const data = new Bank(req.body)
+      await data.save()
+      resolve.success(res, 201, `${data.bank} created successfully`, data)
    } catch (err) {
-      res.status(400).json({ message: err.message });
+      next(new ErrorResponse(err.message, 400))
    }
 }
 
 async function update(req, res, next) {
-   const { id } = req.params;
-   const updateData = req.body;
    try {
-      const updatedBank = await Bank.findByIdAndUpdate(id, updateData, { new: true });
-      if (!updatedBank) return res.status(404).json({ message: 'Bank not found' });
-      res.json(updatedBank);
+      const data = await Bank.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+      if (!data) return next(new ErrorResponse('Bank not found', 404))
+      resolve.success(res, 201, `${data.bank} updated successfully`, data)
    } catch (err) {
-      res.status(400).json({ message: err.message });
+      next(new ErrorResponse(err.message, 400))
    }
 }
 
 async function remove(req, res, next) {
-   const { id } = req.params;
    try {
-      const deletedBank = await Bank.findByIdAndDelete(id);
-      if (!deletedBank) return res.status(404).json({ message: 'Bank not found' });
-      res.json({ message: 'Bank deleted successfully' });
+      const data = await Bank.findByIdAndDelete(req.params.id);
+      if (!data) return next(new ErrorResponse('Bank not found', 404))
+      resolve.success(res, 204, 'Bank deleted successfully', data)
    } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(new ErrorResponse(err.message))
    }
 }

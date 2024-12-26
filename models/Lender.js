@@ -7,7 +7,13 @@ const LenderSchema = new mongoose.Schema({
    },
    type: {
       type: [String],
-      enum: ['','CMBS', 'Construction Loan', 'Bank', 'Fund', 'Freddie Fannie', 'SBL'],
+      enum: ['CMBS', 'Construction Loan', 'Bank', 'Fund', 'Freddie Fannie', 'SBL'],
+      validate: {
+         validator: function (value) {
+            return value.length > 0
+         },
+         message: 'Loan type should be at least 1 type', 
+      },
    },
    deal_size: {
       type: Number,
@@ -17,7 +23,7 @@ const LenderSchema = new mongoose.Schema({
    },
    position: {
       type: String,
-      enum: ['','Team Leader', 'Assistant Vice President', 'Originator', 'Loan Officer', 'MANAGING DIRECTOR'],
+      enum: ['Team Leader', 'Assistant Vice President', 'Originator', 'Loan Officer', 'MANAGING DIRECTOR'],
    },
    office: {
       type: Number,
@@ -29,11 +35,11 @@ const LenderSchema = new mongoose.Schema({
       type: String,
       match: [
          /^(?=.{1,256}$)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,}|xn--[a-zA-Z0-9]+)$/,
-         'valid email required',
+         'email not valid',
       ]
    },
-   notes:{
-      type:[NoteSchema]
+   notes: {
+      type: [NoteSchema]
    }
 });
 
