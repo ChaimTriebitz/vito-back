@@ -8,15 +8,15 @@ const LenderSchema = new mongoose.Schema({
    type: {
       type: [String],
       enum: ['CMBS', 'Construction Loan', 'Bank', 'Fund', 'Freddie Fannie', 'SBL'],
-      validate: {
-         validator: function (value) {
-            return value.length > 0
-         },
-         message: 'Loan type should be at least 1 type', 
-      },
+      // validate: {
+      //    validator: function (value) {
+      //       return value.length > 0
+      //    },
+      //    message: 'Loan type should be at least 1 type', 
+      // },
    },
    deal_size: {
-      type: Number,
+      type: String,
    },
    contact: {
       type: String,
@@ -26,10 +26,10 @@ const LenderSchema = new mongoose.Schema({
       enum: ['Team Leader', 'Assistant Vice President', 'Originator', 'Loan Officer', 'MANAGING DIRECTOR'],
    },
    office: {
-      type: Number,
+      type: String,
    },
    cell: {
-      type: Number,
+      type: String,
    },
    email: {
       type: String,
@@ -38,9 +38,11 @@ const LenderSchema = new mongoose.Schema({
          'email not valid',
       ]
    },
-   notes: {
-      type: [NoteSchema]
-   }
+   // notes: {
+   //    type: [NoteSchema]
+   // }
 });
+
+// LenderSchema.index({ lender: 1, contact: 1 }, { unique: true });
 
 module.exports = mongoose.model('Lender', LenderSchema);

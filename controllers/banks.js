@@ -31,6 +31,8 @@ async function createMany(req, res, next) {
 async function create(req, res, next) {
    try {
       const data = new Bank(req.body)
+      console.log(data);
+      
       await data.save()
       resolve.success(res, 201, `${data.bank} created successfully`, data)
    } catch (err) {

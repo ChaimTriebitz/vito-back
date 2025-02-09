@@ -11,6 +11,9 @@ function error(err, req, res, next) {
       case 400:
          message = message.split(':').pop().trim() || 'Not Valid'
          break;
+      case 401:
+         message = message.split(':').pop().trim() || 'Not authorized'
+         break;
       default: message = 'Server Error'
    }
 
